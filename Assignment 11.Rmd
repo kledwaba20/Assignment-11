@@ -1,0 +1,57 @@
+---
+title: "Assignment 11"
+author: "Khutso Ledwaba"
+date: "2022-11-19"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Calling the library and data file
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+library("lpSolveAPI")
+
+AP <- read.lp("Assignment11_AP.lp")
+print(AP)
+```
+
+
+##number of workers needed each day of the week and package handlers required
+```{r}
+Workers <- matrix(c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",
+18,27,22,26,25,21,19),ncol=2,byrow = F)
+colnames(Workers) <- c("Day", "Workers_Required")
+as.table(Workers)
+
+Package_Handler_Workers <- matrix(c(1,2,3,4,5,6,7,
+                               "Sunday and Monday","Monday and Tuesday","Tuesday and Wednesday","Wednesday and Thursday","Thursday and Friday","Friday and Saturday","Saturday and Sunday",
+                               "$775","$800","$800","$800","$800","$775","$750"),ncol=3,byrow=F)
+
+colnames(Package_Handler_Workers) <- c("Shift", "Days_Off", "Wage")
+as.table(Package_Handler_Workers)
+
+```
+
+##Solving the objective function and the model
+```{r}
+solve(AP)
+get.objective(AP)
+
+##The total cost to the firm  is $25,675.00
+
+get.variables(AP)
+#The number of workers available each day are:
+
+#"Sunday and Monday":2
+#"Monday and Tuesday": 4
+#"Tuesday and Wednesday": 5
+#"Wednesday and Thursday": 0
+#"Thursday and Friday": 8
+#"Friday and Saturday": 1
+#"Saturday and Sunday":13
+```
+
